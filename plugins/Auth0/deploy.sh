@@ -35,16 +35,19 @@ done
 aws ssm put-parameter \
     --name "Serverless-SaaS-Auth0-Domain" \
     --value "$AUTH0_DOMAIN" \
-    --type String
+    --type String \
+    --overwrite
 
 aws ssm put-parameter \
     --name "Serverless-SaaS-Auth0-ClientId" \
     --value "$AUTH0_CLIENT_ID" \
-    --type String
+    --type String \
+    --overwrite
 
 aws ssm put-parameter \
     --name "Serverless-SaaS-Auth0-ClientSecret" \
     --value "$AUTH0_CLIENT_SECRET" \
-    --type SecureString
+    --type SecureString \
+    --overwrite
 
 echo "Auth0 Idp SSM parameters configured"
