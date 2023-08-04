@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CreateComponent implements OnInit {
   submitting = false;
   tenantForm: FormGroup = this.fb.group({
-    tenantName: [null, [Validators.required]],
+    tenantName: [null, [Validators.required, Validators.minLength(3)]], // minium Organization Name Length in Auth0 is 3
     tenantEmail: [null, [Validators.email, Validators.required]],
     tenantTier: [null, [Validators.required]],
     tenantPhone: [null],

@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 export class RegisterComponent implements OnInit {
   submitting: boolean = false;
   tenantForm: FormGroup = this.fb.group({
-    tenantName: ['', [Validators.required]],
+    tenantName: ['', [Validators.required, Validators.minLength(3)]], // minium Organization Name Length in Auth0 is 3
     tenantEmail: ['', [Validators.email, Validators.required]],
     tenantTier: ['', [Validators.required]],
     tenantPhone: [''],
