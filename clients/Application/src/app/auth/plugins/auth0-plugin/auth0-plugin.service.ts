@@ -23,7 +23,8 @@ export default class Auth0PlugInService implements IdentityProviderPlugin {
       postLogoutRedirectUri: window.location.origin,
       postLoginRoute: "/dashboard",
       customParamsAuthRequest: {
-        organization: config.idpDetails.idp.orgId
+        organization: config.idpDetails.idp.orgId,
+        audience: "api://saas-management-api" // Auth0 will only include a payload for an Access Token if an audience is provided
       }
     });
   };

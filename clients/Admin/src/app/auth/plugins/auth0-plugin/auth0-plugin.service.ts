@@ -22,7 +22,10 @@ export default class Auth0PluginService implements IdentityProviderPlugin {
       responseType: 'code',
       useRefreshToken: true,
       postLogoutRedirectUri: window.location.origin,
-      postLoginRoute: "/dashboard"
+      postLoginRoute: "/dashboard",
+      customParamsAuthRequest: {
+        audience: "api://saas-management-api" // Auth0 will only include a payload for an Access Token if an audience is provided
+      }
     })
   }
 
