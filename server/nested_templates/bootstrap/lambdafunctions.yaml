@@ -197,6 +197,10 @@ Resources:
                   - dynamodb:Query
                 Resource:
                   - !Ref TenantUserMappingTableArn
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
   CreateUserLambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -234,6 +238,10 @@ Resources:
                   - dynamodb:GetItem
                 Resource:
                   - !Ref TenantDetailsTableArn
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
   CreateTenantAdminUserFunction:
     Type: AWS::Serverless::Function
     DependsOn: CreateUserLambdaExecutionRole
@@ -603,6 +611,10 @@ Resources:
                   - dynamodb:GetItem
                 Resource:
                   - !Ref ServerlessSaaSSettingsTableArn
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
   CreateTenantFunction:
     Type: AWS::Serverless::Function
     DependsOn: TenantManagementLambdaExecutionRole
@@ -912,6 +924,10 @@ Resources:
                 Action:
                   - cognito-idp:*
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
   RegisterTenantFunction:
     Type: AWS::Serverless::Function
     DependsOn: RegisterTenantLambdaExecutionRole
@@ -998,6 +1014,10 @@ Resources:
                 Action:
                   - cloudformation:DeleteStack
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
   ProvisionTenantFunction:
     Type: AWS::Serverless::Function
     DependsOn: ProvisionTenantLambdaExecutionRole
@@ -1064,6 +1084,10 @@ Resources:
               - Effect: Allow
                 Action: "*"
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
   DeProvisionTenantFunction:
     Type: AWS::Serverless::Function
     DependsOn: DeProvisionTenantLambdaExecutionRole

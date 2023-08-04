@@ -1,3 +1,4 @@
 requests
 aws_requests_auth
 urllib3==1.25.11
+auth0-python

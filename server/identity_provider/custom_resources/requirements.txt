@@ -1,3 +1,4 @@
 requests
 crhelper
 urllib3==1.25.11
+auth0-python

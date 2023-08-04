@@ -46,7 +46,7 @@ Resources:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - sts:AssumeRole          
+              - sts:AssumeRole     
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy    
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
@@ -60,6 +60,11 @@ Resources:
                 Action:
                   - cognito-idp:*
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ssm:Get*
+                  - ssm:Put*
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/Serverless-SaaS-*" 
                   
   CreateOperationUsersIdpFunction:
     Type: AWS::Serverless::Function
@@ -83,7 +88,8 @@ Resources:
       ServiceToken: !GetAtt CreateOperationUsersIdpFunction.Arn
       AdminCallbackURL: !Join ["",["https://",!Ref AdminCallbackURLParameter, "/"]]
       SystemAdminRoleName: !Ref SystemAdminRoleNameParameter 
-      AdminEmail: !Ref AdminEmailParameter  
+      AdminEmail: !Ref AdminEmailParameter
+      Timeout: 10
 
   CreatePooledIdpFunction:
     Type: AWS::Serverless::Function
