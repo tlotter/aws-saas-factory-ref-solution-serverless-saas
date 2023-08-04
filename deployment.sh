@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-echo "Select your identity provider:"
+echo "Select your identity provider (1 or 2):"
 select yn in "Cognito" "Auth0"; do
     IDP_NAME=$yn
     case $yn in
