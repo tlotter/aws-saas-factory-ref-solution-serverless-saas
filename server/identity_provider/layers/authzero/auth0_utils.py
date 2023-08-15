@@ -121,7 +121,9 @@ def create_or_update_auth0_client(auth0, client_name, callback_url, enable_organ
         # update callback URL
         client_id = client["client_id"]
         auth0.clients.update(client_id, {
-            "callbacks": [callback_url]
+            "callbacks": [callback_url],
+            "allowed_logout_urls": [callback_url],
+            "web_origins": [callback_url],
         })
     return client
 
@@ -376,7 +378,7 @@ def create_or_update_action(auth0, action_name, action_code, trigger_id = "post-
 auth0_action_enrich_saas_token = """
 // V1
 exports.onExecutePostLogin = async (event, api) => {
-    const saas_namespace = 'https://saas-serverless';
+     const saas_namespace = 'https://saas-serverless';
  
      const SYSTEM_ADMIN_ROLE = 'SystemAdmin'
      const CUSTOMER_SUPPORT_ROLE = 'CustomerSupport'
@@ -387,7 +389,7 @@ exports.onExecutePostLogin = async (event, api) => {
      const AUTH0_SAAS_APP_NAME = 'SaaS Application'
      
      // Step 1: Include Email in Access Token
-     api.accessToken.setCustomClaim('${saas_namespace}/email', event.user.email);
+     api.accessToken.setCustomClaim(saas_namespace + '/email', event.user.email);
  
      // Step 2: Default Role for all Users is TenantUser
      var roles = TENANT_USER_ROLE
@@ -414,17 +416,17 @@ exports.onExecutePostLogin = async (event, api) => {
          // Include TenantID and Tier in ID and Acccess Token
          if(event.organization) {
            var tenantId = event.organization.metadata.tenant_id;
-           api.idToken.setCustomClaim('${saas_namespace}/tenantId', tenantId);
-           api.accessToken.setCustomClaim('${saas_namespace}/tenantId', tenantId);
+           api.idToken.setCustomClaim(saas_namespace + '/tenantId', tenantId);
+           api.accessToken.setCustomClaim(saas_namespace + '/tenantId', tenantId);
  
            var tier = event.organization.metadata.tier;
-           api.idToken.setCustomClaim('${saas_namespace}/tier', tier);
-           api.accessToken.setCustomClaim('${saas_namespace}/tier', tier);
+           api.idToken.setCustomClaim(saas_namespace + '/tier', tier);
+           api.accessToken.setCustomClaim(saas_namespace + '/tier', tier);
          }
      }
  
      // Step 5: Include Role in Access and ID Token
-     api.idToken.setCustomClaim('${saas_namespace}/roles', roles);
-     api.accessToken.setCustomClaim('${saas_namespace}/roles', roles);
+     api.idToken.setCustomClaim(saas_namespace + '/roles', roles);
+     api.accessToken.setCustomClaim(saas_namespace + '/roles', roles);
  };
  """
