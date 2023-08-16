@@ -77,11 +77,11 @@ def get_auth0_client_by_name(auth0, client_name):
     return 0
 
 # create a new auth0 client
-def create_auth0_client(auth0, client_name, callback_url, enable_organization):
+def create_auth0_client(auth0, client_name, callback_url, enable_organization, login_url_postfix = ""):
     client_config = {
             "name":client_name,
             "app_type":"spa",
-            #"initiate_login_uri":callback_url,
+            "initiate_login_uri": callback_url + login_url_postfix,
             "callbacks": [callback_url],
             "allowed_logout_urls": [callback_url],
             "web_origins": [callback_url],
@@ -110,12 +110,12 @@ def create_auth0_client(auth0, client_name, callback_url, enable_organization):
     return auth0.clients.create(client_config)
 
 # get an existing auth0 client or create a new
-def create_or_update_auth0_client(auth0, client_name, callback_url, enable_organization):
+def create_or_update_auth0_client(auth0, client_name, callback_url, enable_organization, login_url_postfix = ""):
     client = get_auth0_client_by_name(auth0, client_name)
     # create admin application
     if client == 0:
         print("CREATE: Auth0 Application *" + client_name + "*")
-        return create_auth0_client(auth0, client_name, callback_url, enable_organization)
+        return create_auth0_client(auth0, client_name, callback_url, enable_organization, login_url_postfix)
     else:
         print("UPDATE: Auth0 Application *" + client_name+ "*")
         # update callback URL
@@ -124,6 +124,7 @@ def create_or_update_auth0_client(auth0, client_name, callback_url, enable_organ
             "callbacks": [callback_url],
             "allowed_logout_urls": [callback_url],
             "web_origins": [callback_url],
+            "initiate_login_uri": callback_url + login_url_postfix
         })
     return client
 
@@ -219,7 +220,7 @@ def get_or_create_organization(auth0, org_name, org_tier, org_tenant_id, connect
             "enabled_connections": [
                 {
                     "connection_id": connection_id,
-                    "assign_membership_on_login": True,
+                    "assign_membership_on_login": False, # assign user manually to enforce isolation between Auth0 Organizations
                 }
             ]
         })
