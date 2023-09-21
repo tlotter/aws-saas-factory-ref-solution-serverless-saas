@@ -1,5 +1,20 @@
 #!/bin/bash -e
 
+echo "Do you have Docker running on your computer? (It's required to compile some source code)"
+select yc in "Confirm" "Cancel"; do
+    case $yc in
+        Confirm)
+            break
+            ;;
+        Cancel)
+            exit
+            ;;
+        *)
+            echo "Invalid option. Please select a valid option."
+            ;;
+    esac
+done
+
 echo "Select your identity provider (1 or 2):"
 select yn in "Cognito" "Auth0"; do
     IDP_NAME=$yn
