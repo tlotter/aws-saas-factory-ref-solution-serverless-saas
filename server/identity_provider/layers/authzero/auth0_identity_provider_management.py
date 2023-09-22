@@ -1,9 +1,11 @@
 import logger
 import boto3
-import time
 from abstract_classes.identity_provider_abstract_class import IdentityProviderAbstractClass
 
 from authzero.auth0_utils import *
+
+# TODO: removed import time when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+import time
 
 ssm = boto3.client('ssm')
 
@@ -84,11 +86,11 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         # Step 5: Return Value
         logger.info("Step 5: Return Value")
         return {
-            'idp': {
-                'name': 'Auth0',
-                'domain': auth0_domain,
-                'clientId': saas_app_client_id,
-                'orgId': organization_id
+            "idp": {
+                "name": "Auth0",
+                "domain": auth0_domain,
+                "clientId": saas_app_client_id,
+                "orgId": organization_id
             }
         }
         
@@ -120,26 +122,29 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         auth0 = create_auth0(auth0_domain, auth0_client_id, auth0_client_secret)
 
         # Step 3: Configure Auth0 Tenant Settings (run once during deployment)
-        # TODO: run this on created pooled idp??
         logger.info("Step 3: Configure Auth0 Tenant Settings (run once during deployment)")
         configure_auth0_tenant(auth0, saas_app_callback_url)
 
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+        time.sleep(1)
+
         # Step 4: Create SaaS Application
         logger.info("Step 4: Create SaaS Application")
-        saas_app = create_or_update_auth0_client(auth0, AUTH0_SAAS_APP_NAME, saas_app_callback_url, True)
+        saas_app = create_or_update_auth0_client(auth0, AUTH0_SAAS_APP_NAME, saas_app_callback_url, True, "#/dashboard")
         saas_app_client_id = saas_app["client_id"]
         saas_app_client_secret = saas_app["client_secret"]
         ssm_set_value(SSM_SERVERLESS_SAAS_AUTH0_SAAS_APP_CLIENT_ID, saas_app_client_id)
 
-        # ===== Sleep =====
-        logger.info("SLEEP: Wait for 1 seconds because the free trial of Auth0 has some Rate Limits on the Management APIs and the maxium re-try rate & time configurable of the Auth0 Python SDK is not enough.")
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
         time.sleep(1)
-        # =================
 
         # Step 5: Create DB for SaaS Application
         logger.info("Step 5: Create DB for SaaS Application")
         saas_app_database_id = get_or_create_db_connection(auth0, AUTH0_SAAS_APP_DATABASE_NAME, saas_app_client_id, auth0_client_id)
         ssm_set_value(SSM_SERVERLESS_SAAS_AUTH0_SAAS_APP_DATABASE_ID, saas_app_database_id)
+
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+        time.sleep(1)
 
         # Step 6: Create TenantAdmin Role
         logger.info("Step 6: Create SystemAdmin Role")
@@ -150,10 +155,10 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         # Step 7: Return value
         logger.info("Step 7: Return value")
         return {
-            'idp': {
-                'name': 'Auth0',
-                'domain': auth0_domain,
-                'clientId': saas_app_client_id
+            "idp": {
+                "name": "Auth0",
+                "domain": auth0_domain,
+                "clientId": saas_app_client_id
             }
         }
     
@@ -187,21 +192,22 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         logger.info("Step 2: Get Access Token for Management API")
         auth0 = create_auth0(auth0_domain, auth0_client_id, auth0_client_secret)
 
-        # ===== Sleep =====
-        logger.info("SLEEP: Wait for 1 seconds because the free trial of Auth0 has some Rate Limits on the Management APIs and the maxium re-try rate & time configurable of the Auth0 Python SDK is not enough.")
-        time.sleep(1)
-        # =================
-
         # Step 3: Configure Auth0 Tenant Settings (run once during deployment)
         logger.info("Step 3: Configure Auth0 Tenant Settings (run once during deployment)")
         configure_auth0_tenant(auth0, admin_callback_url)
 
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+        time.sleep(1)
+
         # Step 4:  Create Admin Application
         logger.info("Step 4:  Create Admin Application")
-        admin_app = create_or_update_auth0_client(auth0, AUTH0_ADMIN_APP_NAME, admin_callback_url, False)
+        admin_app = create_or_update_auth0_client(auth0, AUTH0_ADMIN_APP_NAME, admin_callback_url, False, "#/dashboard")
         admin_app_client_id = admin_app["client_id"]
         admin_app_client_secret = admin_app["client_secret"]
         ssm_set_value(SSM_SERVERLESS_SAAS_AUTH0_ADMIN_APP_CLIENT_ID, admin_app_client_id)
+
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+        time.sleep(1)
 
         # Step 5: Create DB for Admin Application and create admin user
         logger.info("Step 5: Create DB for Admin Application and create admin user")
@@ -213,6 +219,9 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         logger.info("Step 5.3:" + admin_user_id)
         ssm_set_value(SSM_SERVERLESS_SAAS_AUTH0_ADMIN_APP_DATABASE_ID, admin_database_id)
 
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+        time.sleep(1)
+
         # Step 6: Create SystemAdmin Role and assign to admin user
         logger.info("Step 6: Create SystemAdmin Role and assign to admin user")
         system_admin_role = get_or_create_role(auth0, SERVERLESS_SAAS_ROLE_SYSTEM_ADMIN)
@@ -220,16 +229,17 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         add_user_to_role(auth0, system_admin_role_id, admin_user_id)
         ssm_set_value(SSM_SERVERLESS_SAAS_AUTH0_SYSTEM_ADMIN_ROLE_ID, system_admin_role_id)
 
-        # ===== Sleep =====
-        logger.info("SLEEP: Wait for 1 seconds because the free trial of Auth0 has some Rate Limits on the Management APIs and the maxium re-try rate & time configurable of the Auth0 Python SDK is not enough.")
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
         time.sleep(1)
-        # =================
 
         # Step 7: Create API with Audience
         logger.info("Step 7: Create API with Audience")
         api = get_or_create_api(auth0, AUTH0_SAAS_APP_API_NAME, AUTH0_SAAS_APP_API_AUDIENCE)
         api_id = api["id"]
         ssm_set_value(SSM_SERVERLESS_SAAS_AUTH0_API_ID, api_id)
+
+        # TODO: removed sleep when the following fix is merged to the Auth0 Python SDK: https://github.com/auth0/auth0-python/issues/513
+        time.sleep(1)
 
         # Step 8: Create Auth0 Action to enrich token
         logger.info("Step 8: Create Auth0 Action to enrich token")
@@ -240,9 +250,9 @@ class Auth0IdentityProviderManagement (IdentityProviderAbstractClass):
         # Step 9: Return value
         logger.info("Step 9: Return value")
         return {
-            'idp': {
-                'name': 'Auth0',
-                'domain': auth0_domain,
-                'clientId': admin_app_client_id
+            "idp": {
+                "name": "Auth0",
+                "domain": auth0_domain,
+                "clientId": admin_app_client_id
             }
         }
