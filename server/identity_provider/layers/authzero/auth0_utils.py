@@ -335,6 +335,19 @@ def create_or_update_action(auth0, action_name, action_code, trigger_id = "post-
         auth0.actions.update_action(id=action_id, body={ "code": action_code })
         # 2. deploy action
         auth0.actions.deploy_action(action_id)
+        # 3. update trigger binding
+        auth0.actions.update_trigger_bindings(
+            trigger_id,
+            {
+                "bindings": [
+                    {
+                        "ref": {"type": "action_name", "value": action_name},
+                        "display_name": action_name,
+                    }
+                ]
+            },
+        )
+
         return action
     else:
         print("CREATE: Action *" + action_name + "*")

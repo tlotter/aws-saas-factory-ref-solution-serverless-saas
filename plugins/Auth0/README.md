@@ -106,35 +106,35 @@ They will create 2 Databases and 2 Single Page Applications in your Auth0 tenant
 <p align="center"><img src="images/database_connections.png" alt="Database Connections"/>Figure 1: Auth0 Database Connections</p>
 <p align="center"><img src="images/applications.png" alt="Auth0 Applications"/>Figure 2: Auth0 Applications</p>
 
-The **SaaS Admin** Application allows the login only from the **SaaS-Admin-Username-Password-Authentication** Database. The **SaaS Application** Application allows the login only from the **SaaS-App-Username-Password-Authentication** Database. 
-<p align="center"><img src="images/saas_admin_application_connection.png" alt="SaaS Admin Application Connection"/>Figure 3: SaaS Admin Application Connection</p>
+The **SaaS Admin** Application allows the login from the **SaaS-Admin-Username-Password-Authentication** Database. The **SaaS Application** Application allows the login from the **SaaS-App-Username-Password-Authentication** Database. 
+<p align="center"><img src="images/saas_admin_application_connection.png" alt="SaaS Admin Application Connections"/>Figure 3: SaaS Admin Application Connections</p>
 
 To use Auth0 Organizations for the **SaaS Application**, the configuration for **Organizations** was set to **Business Users**.
-<p align="center"><img src="images/saas_application_organization_business_users.png" alt="SaaS Application Organization Business Users"/>Figure 4: SaaS Application Organization Business Users</p>
+<p align="center"><img src="images/saas_application_organization_business_users.png" alt="SaaS Application Organization Business Users"/>Figure 4: SaaS Application Organization Configuration: Business Users</p>
 
-The Login flow for the **SaaS Application** can be configured in 3 different ways. By default it's **prompt for credentials**. The user starts to enter his email address.
-<p align="center"><img src="images/application_organization_prompt_for_credentials.png" alt="Application Organization Prompt for credentials"/>Figure 5: Application Organization Prompt for credentials</p>
+The Login flow for the **SaaS Application** can be configured in 3 different ways. By default it's **prompt for credentials**. The user starts by entering his email address.
+<p align="center"><img src="images/application_organization_prompt_for_credentials.png" alt="Application Organization Prompt for credentials"/>Figure 5: Application Organization Configuration: Prompt for credentials</p>
 
- What happens if the user belongs to multiple Organizations? Auth0 will provide an Organization Selector:
-<p align="center"><img src="images/application_organization_selector.png" alt="Auth0 Organization Selector"/>Figure 6: Auth0 Organization Selector</p>
+ What happens if the user belongs to multiple Organizations? Auth0 will provide an Organization Picker:
+<p align="center"><img src="images/application_organization_selector.png" alt="Auth0 Organization Picker"/>Figure 6: Auth0 Organization Picker</p>
 
 The other approach is how this sample app is implemented, you start by entering the tenant name, or with Auth0 it's the Organization Name:
-<p align="center"><img src="images/application_organization_prompt_for_organization.png" alt="Application Organization Prompt for Organization"/>Figure 7: Application Organization Prompt for Organization</p>
+<p align="center"><img src="images/application_organization_prompt_for_organization.png" alt="Application Organization Prompt for Organization"/>Figure 7: Application Organization Configuration: Prompt for Organization</p>
 
 The deployment script also creates 2 Roles: **SystemAdmin** and **TenantAdmin**.
 <p align="center"><img src="images/roles.png" alt="Auth0 Roles"/>Figure 8: Auth0 Roles</p>
 
 The initial Admin User is created in the **SaaS-Admin-Username-Password-Authentication** Database and the Role **SystemAdmin** was assigned.
-<p align="center"><img src="images/admin_user.png" alt="Admin User"/>Figure 9: Admin User</p>
-<p align="center"><img src="images/admin_user_roles.png" alt="SystemAdmin User Role is assigned to the User"/>Figure 10: SystemAdmin User Role is assigned to the User</p>
+<p align="center"><img src="images/admin_user.png" alt="Initial Admin User"/>Figure 9: Initial Admin User</p>
+<p align="center"><img src="images/admin_user_roles.png" alt="SystemAdmin Role is assigned to the User"/>Figure 10: SystemAdmin Role is assigned to the User</p>
 
 Auth0 provides multiple flows that can be customized and extended. As part of this sample application is the **Login** flow customized: 
 <p align="center"><img src="images/flows.png" alt="Auth0 Flows"/>Figure 11: Auth0 Flows</p>
 
 The **Login** flow has a custom Auth0 Action called **Enrich SaaS Token**.
 - Auth0 Actions are written in JavaScript and run during the Authentication request. They work similar to a Lambda Function, but they are hosted and run inside Auth0.
-- The **Enrich SaaS Token** Action will provide additional claims on each login. We will take a closer look at them in the following labs.
-<p align="center"><img src="images/login_flow_enrich_saas_token.png" alt="Login Flow Enrich SaaS Token"/>Figure 12: Login Flow Enrich SaaS Token</p>
+- The **Enrich SaaS Token** Action will provide additional claims on each login. We will take a closer look at them in the following steps.
+<p align="center"><img src="images/login_flow_enrich_saas_token.png" alt="Auth0 Login Flow - Enrich SaaS Token"/>Figure 12: Login Flow Enrich SaaS Token</p>
 
 ### 3. First Login with Admin Application with Auth0
 
